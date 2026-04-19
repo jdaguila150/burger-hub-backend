@@ -15,7 +15,18 @@ app.use(express.json());
 // LocalAuth guarda la sesión para que no tengas que escanear el QR cada vez que reinicias
 const client = new Client({
     authStrategy: new LocalAuth(),
-    puppeteer: { headless: true } // Corre en modo invisible
+    puppeteer: { 
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu'
+        ] 
+    } 
 });
 
 client.on('qr', (qr) => {
@@ -50,7 +61,7 @@ app.post('/api/reservar', async (req, res) => {
 
     // Número del dueño del restaurante (Debe incluir el código de país, ej. 52 para México)
     // Se le agrega '@c.us' al final, es la regla de WhatsApp
-    const numeroDueño = '5215500000000@c.us'; // ¡CAMBIA ESTO POR TU NÚMERO PARA PROBAR!
+    const numeroDueño = '5215578316713@c.us'; // ¡CAMBIA ESTO POR TU NÚMERO PARA PROBAR!
 
     const mensajeAviso = `🚨 *NUEVA RESERVA DESDE LA WEB* 🚨\n\n👤 *Cliente:* ${nombre}\n👥 *Personas:* ${personas}\n📅 *Fecha:* ${fecha}\n⏰ *Hora:* ${hora}`;
 
